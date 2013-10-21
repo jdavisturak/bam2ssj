@@ -26,7 +26,7 @@
 #include "list.h"
 
 #define MAXFILEBUFFLENGTH 1000
-#define ARRAY_MARGIN 2
+#define ARRAY_MARGIN 2 
 #define INFTY 65535
 #define WINDOW 1
 #define MIN2(A,B) ((A<B) ? (A) : (B))
@@ -324,11 +324,12 @@ int main(int argc,char* argv[]) {
 	    n_skipped_reads++;
 	continue;
 	}
-
-        if(stranded && ((c->flag & BAM_FREAD1) && (c->flag & BAM_FREAD2) || !(c->flag & BAM_FREAD1) && !(c->flag & BAM_FREAD2))) {
+      
+	    if(stranded && (c->flag & BAM_FPAIRED) && ((c->flag & BAM_FREAD1) && (c->flag & BAM_FREAD2) || !(c->flag & BAM_FREAD1) && !(c->flag & BAM_FREAD2))) {
             n_skipped_reads++;
-            continue;
+         continue;
         }
+
 
         cigar = bam1_cigar(b);
 
@@ -349,7 +350,8 @@ int main(int argc,char* argv[]) {
 	beg_prev = beg;
 
 	s = ((c->flag & BAM_FREVERSE)>0);
-	mapped_strand = (c->flag & BAM_FREAD1) ? (s + rev_compl[0]) & 1 : (s + rev_compl[1]) & 1;
+	mapped_strand = (c->flag & BAM_FREAD2) ? (s + rev_compl[1]) & 1 : (s + rev_compl[0]) & 1; // reversed this logic so unpaired data used rev_compl[0]
+
 
 	the_end = bam_calend(c, cigar);
 
