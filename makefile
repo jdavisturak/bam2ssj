@@ -1,11 +1,11 @@
-SAMDIR=~/samtools/
+SAMDIR=/mnt/ahseqnas/BigMax/jeremy/install/samtools-0.1.18/
 GCC=g++
 
 .PHONY: all
 
 all: bam2ssj
 
-EXPORT = bam2ssj-dp-1.6
+EXPORT = /opt/bam2ssj
 
 export:
 	mkdir $(EXPORT)/
@@ -36,7 +36,7 @@ list.o : list.c list.h
 	$(GCC) -c list.c
 
 bam2ssj:	bam2ssj.c progressbar.o list.o $(SAMDIR)libbam.a
-	$(GCC) -I $(SAMDIR) bam2ssj.c progressbar.o list.o $(SAMDIR)libbam.a -lz -o bam2ssj
+	$(GCC) -I $(SAMDIR) bam2ssj.c progressbar.o list.o  $(SAMDIR)libbam.a  -lz -o bam2ssj
 
 clean:
 	rm -f -r progressbar.o list.o bam2ssj
